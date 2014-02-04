@@ -32,7 +32,7 @@
         NSURL *url = [NSURL URLWithString:(NSString *) [images[i] objectForKey:@"url"]];
         [self.images addObject: url];
     }
-    
+    NSLog(@"Images count: %d", self.images.count);
     return self;
 }
 

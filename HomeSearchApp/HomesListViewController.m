@@ -111,6 +111,9 @@
     cell.cityLabel.text = house.city;
     cell.zipCodeLabel.text = house.zipCode;
     cell.stateLabel.text = house.state;
+    if(house.images.count != 0 ) {
+       [self fetchImage:[house.images objectAtIndex:0] imageViewToLoadInto:cell.houseImageView];
+    }
     return cell;
 }
 
