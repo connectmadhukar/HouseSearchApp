@@ -21,7 +21,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="133"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EDq-4f-XAM">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EDq-4f-XAM">
                                             <rect key="frame" x="5" y="5" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <constraints>
@@ -92,10 +92,10 @@
             </objects>
             <point key="canvasLocation" x="754" y="-1"/>
         </scene>
-        <!--View Controller-->
+        <!--Home Details View Controller-->
         <scene sceneID="PsC-D1-Xsv">
             <objects>
-                <viewController id="cNj-xk-Ocj" sceneMemberID="viewController">
+                <viewController id="cNj-xk-Ocj" customClass="HomeDetailsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rSg-fp-XZe"/>
                         <viewControllerLayoutGuide type="bottom" id="3fA-Mj-7sq"/>
@@ -103,9 +103,57 @@
                     <view key="view" contentMode="scaleToFill" id="tgl-Tg-mTP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EuX-F4-Bqn">
+                                <rect key="frame" x="5" y="95" width="310" height="200"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="T12-G1-gZV"/>
+                                </constraints>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="features for the property" translatesAutoresizingMaskIntoConstraints="NO" id="sCF-1q-J2S">
+                                <rect key="frame" x="5" y="328" width="100" height="95"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="95" id="Wfb-je-ESv"/>
+                                    <constraint firstAttribute="width" constant="100" id="rpP-rj-IXh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Features" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Cg-bc-cMg">
+                                <rect key="frame" x="5" y="302" width="67" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ADp-5U-MBa">
+                                <rect key="frame" x="134" y="69" width="52" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="EuX-F4-Bqn" firstAttribute="leading" secondItem="tgl-Tg-mTP" secondAttribute="leading" constant="5" id="000-9X-FRM"/>
+                            <constraint firstAttribute="centerX" secondItem="ADp-5U-MBa" secondAttribute="centerX" id="BcW-iZ-7hi"/>
+                            <constraint firstAttribute="trailing" secondItem="EuX-F4-Bqn" secondAttribute="trailing" constant="5" id="Jjh-fN-F1W"/>
+                            <constraint firstItem="sCF-1q-J2S" firstAttribute="top" secondItem="3Cg-bc-cMg" secondAttribute="bottom" constant="5" id="Kgg-g2-jQc"/>
+                            <constraint firstItem="3Cg-bc-cMg" firstAttribute="top" secondItem="EuX-F4-Bqn" secondAttribute="bottom" constant="7" id="Vqz-Fg-fTz"/>
+                            <constraint firstItem="sCF-1q-J2S" firstAttribute="leading" secondItem="tgl-Tg-mTP" secondAttribute="leading" constant="5" id="YPp-Zn-x52"/>
+                            <constraint firstItem="3Cg-bc-cMg" firstAttribute="leading" secondItem="tgl-Tg-mTP" secondAttribute="leading" constant="5" id="aez-un-HMc"/>
+                            <constraint firstItem="EuX-F4-Bqn" firstAttribute="top" secondItem="ADp-5U-MBa" secondAttribute="bottom" constant="5" id="qpm-Ci-IG3"/>
+                            <constraint firstItem="ADp-5U-MBa" firstAttribute="top" secondItem="rSg-fp-XZe" secondAttribute="bottom" constant="5" id="t2i-OX-ZQ9"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="dUA-Iz-UA1"/>
+                    <connections>
+                        <outlet property="houseBImageView" destination="EuX-F4-Bqn" id="5Gq-Io-Jdf"/>
+                        <outlet property="houseFeaturesTextView" destination="sCF-1q-J2S" id="CWZ-KB-74p"/>
+                        <outlet property="houseNameLabel" destination="ADp-5U-MBa" id="PLO-TJ-O2N"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX2-Jh-x0J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

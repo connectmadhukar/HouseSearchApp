@@ -7,6 +7,7 @@
 //
 
 #import "HomeDetailsViewController.h"
+#import "AFNetworking.h"
 
 @interface HomeDetailsViewController ()
 
@@ -23,16 +24,37 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    self.houseNameLabel.text = self.house.name;
+    [self.houseNameLabel sizeToFit];
+    self.houseFeaturesTextView.text = self.house.features;
+    [self.houseFeaturesTextView sizeToFit];
+    UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
+    [self.houseBImageView setImage:image];
+    if(self.house.images.count != 0 ) {
+        [self fetchImage:[self.house.images objectAtIndex:0] imageViewToLoadInto:self.houseBImageView];
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) fetchImage:(NSURL *)imageUrl imageViewToLoadInto:(UIImageView *) imageView{
+    NSURLRequest *urlReq = [NSURLRequest requestWithURL:imageUrl];
+    AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
+    postOperation.responseSerializer = [AFImageResponseSerializer serializer];
+    [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Response: %@", responseObject);
+        imageView.image = responseObject;
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Image error: %@", error);
+    }];
+    [postOperation start];
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "HomesListViewController.h"
 #import "House.h"
 #import "HouseCell.h"
+#import "HomeDetailsViewController.h"
 #import <Parse/Parse.h>
 #import "AFNetworking.h"
 
@@ -108,9 +109,15 @@
         cell = [[HouseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.addressLabel.text = house.address;
+    [cell.addressLabel sizeToFit];
     cell.cityLabel.text = house.city;
+    [cell.cityLabel sizeToFit];
     cell.zipCodeLabel.text = house.zipCode;
+    [cell.zipCodeLabel sizeToFit];
     cell.stateLabel.text = house.state;
+    [cell.stateLabel sizeToFit];
+    UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
+    [cell.houseImageView setImage:image];
     if(house.images.count != 0 ) {
        [self fetchImage:[house.images objectAtIndex:0] imageViewToLoadInto:cell.houseImageView];
     }
@@ -181,15 +188,14 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    /*
+    
     UITableViewCell *selectedCell = (UITableViewCell *)sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
-    Movie *movie = self.movies[indexPath.row];
+    House *house = self.houses[indexPath.row];
     
-    MovieViewController *movieViewController = (MovieViewController *)segue.destinationViewController;
-    movieViewController.movie = movie;
-    NSLog(@"%@", movieViewController.movie.cast);
-     */
+    HomeDetailsViewController *homeDetailsViewController = (HomeDetailsViewController *)segue.destinationViewController;
+    homeDetailsViewController.house = house;
+    
 }
 
 
