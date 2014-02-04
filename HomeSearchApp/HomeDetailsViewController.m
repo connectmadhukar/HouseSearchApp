@@ -11,6 +11,7 @@
 
 @interface HomeDetailsViewController ()
 
+
 @end
 
 @implementation HomeDetailsViewController
@@ -26,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.imgNumber = 0;
     self.houseNameLabel.text = self.house.name;
     [self.houseNameLabel sizeToFit];
     self.houseFeaturesTextView.text = self.house.features;
@@ -57,4 +59,15 @@
     [postOperation start];
 }
 
+- (IBAction)imageViewTapAction:(id)sender {
+    NSLog(@"Tapped");
+}
+
+- (IBAction)completeViewTapActionOutlet:(UITapGestureRecognizer *)sender {
+    NSLog(@" er Tapped");
+    if(self.house.images.count != 0 && self.house.images.count != 1) {
+        self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
+        [self fetchImage:[self.house.images objectAtIndex:self.imgNumber] imageViewToLoadInto:self.houseBImageView];
+    }
+}
 @end

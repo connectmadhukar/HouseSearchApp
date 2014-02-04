@@ -15,6 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *houseNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *houseBImageView;
 @property (weak, nonatomic) IBOutlet UITextView *houseFeaturesTextView;
+@property (nonatomic) int imgNumber;
 //@property (weak, nonatomic) IBOutlet MKMapView *houseLocationMapView;
+- (IBAction)imageViewTapAction:(id)sender;
+- (IBAction)completeViewTapActionOutlet:(UITapGestureRecognizer *)sender;
 
 @end
