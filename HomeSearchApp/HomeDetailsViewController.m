@@ -34,9 +34,28 @@
     [self.houseFeaturesTextView sizeToFit];
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     [self.houseBImageView setImage:image];
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = [self.house.latitude doubleValue];
+    coordinate.longitude = [self.house.longitude doubleValue];
+    
+    MKPlacemark *mPlacemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil] ;
+   [self.houseLocationMapView addAnnotation:mPlacemark];
+
+    MKCoordinateRegion region;
+    region.center.latitude = [self.house.latitude doubleValue];
+    region.center.longitude = [self.house.longitude doubleValue];
+    region.span.latitudeDelta = 0.05;
+    region.span.longitudeDelta = 0.05;
+    [self.houseLocationMapView setRegion:region animated:YES];
+    
     if(self.house.images.count != 0 ) {
         [self fetchImage:[self.house.images objectAtIndex:0] imageViewToLoadInto:self.houseBImageView];
     }
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(homeImageViewTapped:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [self.houseBImageView addGestureRecognizer:singleTap];
+    [self.houseBImageView setUserInteractionEnabled:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -50,7 +69,7 @@
     AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
     postOperation.responseSerializer = [AFImageResponseSerializer serializer];
     [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Response: %@", responseObject);
+        //NSLog(@"Response: %@", responseObject);
         imageView.image = responseObject;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -59,14 +78,11 @@
     [postOperation start];
 }
 
-- (IBAction)imageViewTapAction:(id)sender {
-    NSLog(@"Tapped");
-}
-
-- (IBAction)completeViewTapActionOutlet:(UITapGestureRecognizer *)sender {
-    NSLog(@" er Tapped");
+- (IBAction)homeImageViewTapped:(UITapGestureRecognizer *)sender {
+    NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
     if(self.house.images.count != 0 && self.house.images.count != 1) {
         self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
+            NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
         [self fetchImage:[self.house.images objectAtIndex:self.imgNumber] imageViewToLoadInto:self.houseBImageView];
     }
 }

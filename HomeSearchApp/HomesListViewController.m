@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) NSMutableArray *houses;
 @property (nonatomic, strong) NSArray *housesJsonArray;
+@property (nonatomic) NSInteger start;
 
 - (void)logOutButtonTapAction;
 
@@ -58,23 +59,9 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.houses = [NSMutableArray array];
-        NSString *url = @"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&offset=0&limit=10&include_images=true";
-        NSLog(@"fetching houses");
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-            id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            NSLog(@"%@", object);
-            self.housesJsonArray = [object valueForKeyPath:@"collection"];
-            NSArray *housesJsonArray = [object valueForKeyPath:@"collection"];
-            for(int i = 0; i < housesJsonArray.count; i++) {
-                NSDictionary *houseDict = [housesJsonArray objectAtIndex:i];
-                House *house = [[House alloc] initWithDictionary:houseDict];
-                [self.houses addObject:house];
-            }
-            NSLog(@"houses Size %d", self.houses.count);
-            [self.tableView reloadData];
-        }];
-    }
+        self.start = 0;
+        [self fetchMoreData];
+     }
     return self;
 }
 
@@ -130,7 +117,7 @@
     AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
     postOperation.responseSerializer = [AFImageResponseSerializer serializer];
     [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Response: %@", responseObject);
+        //NSLog(@"Response: %@", responseObject);
         imageView.image = responseObject;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -188,7 +175,10 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
+    //NSLog(@"id: %@", segue.identifier);
+    if( segue.identifier != nil && [segue.identifier compare:@"GoToRefineSearch"] == 0) {
+        return;
+    }
     UITableViewCell *selectedCell = (UITableViewCell *)sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
     House *house = self.houses[indexPath.row];
@@ -252,4 +242,34 @@
 }
 
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
+    if (bottomEdge >= scrollView.contentSize.height) {
+        NSLog(@"scrollViewDidEndDecelerating");
+        [self fetchMoreData];
+    }
+ 
+}
+
+- (void) fetchMoreData {
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&limit=10&include_images=true&offset=%d", self.start]];
+    //NSString *url = @"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&offset=0&limit=10&include_images=true";
+    NSLog(@"fetching houses");
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        //NSLog(@"%@", object);
+        self.housesJsonArray = [object valueForKeyPath:@"collection"];
+        NSArray *housesJsonArray = [object valueForKeyPath:@"collection"];
+        for(int i = 0; i < housesJsonArray.count; i++) {
+            NSDictionary *houseDict = [housesJsonArray objectAtIndex:i];
+            House *house = [[House alloc] initWithDictionary:houseDict];
+            [self.houses addObject:house];
+        }
+        self.start += self.houses.count;
+        NSLog(@"houses Size %d start:%d", self.houses.count, self.start);
+        [self.tableView reloadData];
+    }];
+}
 @end
