@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import <Parse/Parse.h>
+#import "RefineSearch.h"
 
-@interface HomesListViewController : UITableViewController<PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
+@interface HomesListViewController : UITableViewController<PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RefineSearch>
 
 @end

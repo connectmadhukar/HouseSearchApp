@@ -10,8 +10,10 @@
 #import "House.h"
 #import "HouseCell.h"
 #import "HomeDetailsViewController.h"
+#import "RefineViewController.h"
 #import <Parse/Parse.h>
 #import "AFNetworking.h"
+#import "SearchPreferance.h"
 
 
 @interface HomesListViewController ()
@@ -19,6 +21,9 @@
 @property (nonatomic, strong) NSMutableArray *houses;
 @property (nonatomic, strong) NSArray *housesJsonArray;
 @property (nonatomic) NSInteger start;
+@property (nonatomic) Boolean reloadRequired;
+@property (nonatomic) Boolean searchPreferanceChanged;
+@property (nonatomic, strong) PFObject *searchPreferance;
 
 - (void)logOutButtonTapAction;
 
@@ -60,7 +65,9 @@
     if (self) {
         self.houses = [NSMutableArray array];
         self.start = 0;
-        [self fetchMoreData];
+        self.reloadRequired = true;
+        self.searchPreferanceChanged = true;
+        //[self fetchMoreData];
      }
     return self;
 }
@@ -108,6 +115,12 @@
     if(house.images.count != 0 ) {
        [self fetchImage:[house.images objectAtIndex:0] imageViewToLoadInto:cell.houseImageView];
     }
+    
+    if(( self.houses.count - indexPath.row) < 5 ) {
+        self.reloadRequired = false;
+        [self fetchMoreData];
+    }
+     
     return cell;
 }
 
@@ -175,16 +188,19 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    //NSLog(@"id: %@", segue.identifier);
+    NSLog(@"id: %@", segue.identifier);
     if( segue.identifier != nil && [segue.identifier compare:@"GoToRefineSearch"] == 0) {
+        RefineViewController *refineViewController = (RefineViewController *)segue.destinationViewController;
+        refineViewController.delegate = self;
         return;
-    }
+    } else {
     UITableViewCell *selectedCell = (UITableViewCell *)sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
     House *house = self.houses[indexPath.row];
     
     HomeDetailsViewController *homeDetailsViewController = (HomeDetailsViewController *)segue.destinationViewController;
     homeDetailsViewController.house = house;
+    }
     
 }
 
@@ -243,33 +259,89 @@
 
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     if (bottomEdge >= scrollView.contentSize.height) {
         NSLog(@"scrollViewDidEndDecelerating");
-        [self fetchMoreData];
+        //self.reloadRequired = false;
+        //[self fetchMoreData];
     }
- 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    if( !self.searchPreferanceChanged) {
+        return;
+    }
+    PFQuery *query = [SearchPreferance query];
+    [query includeKey:@"user"];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error && [objects count]>0) {
+            self.searchPreferance = objects[0];
+            NSLog(@"search Preferance:%@", self.searchPreferance);
+            //[self fetchMoreData];
+        } else {
+            self.searchPreferance = [PFObject objectWithClassName:@"SearchPreferance"];
+        }
+        self.houses = [NSMutableArray array];
+        self.start = 0;
+        [self fetchMoreData];
+    }];
+}
+
+-(void)searchWithPreferance:(SearchPreferance *)searchPreferance {
+    self.searchPreferance = searchPreferance;
+    NSLog(@"searchPreferanceChanged");
+    self.searchPreferanceChanged = true;
 }
 
 - (void) fetchMoreData {
+    
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&limit=10&include_images=true&offset=%d", self.start]];
+    
+    NSString *urlString =[NSString stringWithFormat:@"http://www.rentmetrics.com/api/v1/apartments.json?api_token=TEST&limit=10&include_images=true&offset=%d", self.start];
+
+    if( self.searchPreferance[@"address"] != nil ) {
+        urlString = [NSString stringWithFormat:@"%@%@%@", urlString, @"&address=", [self.searchPreferance[@"address"] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+    }
+
+    if( self.searchPreferance[@"distance"] != nil ) {
+        urlString = [NSString stringWithFormat:@"%@%@%@", urlString, @"&max_distance_mi=", self.searchPreferance[@"distance"] ];
+    }
+
+    if( self.searchPreferance[@"bathRooms"] != nil ) {
+        urlString = [NSString stringWithFormat:@"%@%@%@", urlString, @"&bathrooms=", self.searchPreferance[@"bathRooms"] ];
+    }
+
+    if( self.searchPreferance[@"bedRooms"] != nil ) {
+        urlString = [NSString stringWithFormat:@"%@%@%@", urlString, @"&bedrooms=", self.searchPreferance[@"bedRooms"] ];
+    }
+    NSLog(@"urlString:%@",urlString);
+    url = [NSURL URLWithString:urlString];
+    
     //NSString *url = @"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&offset=0&limit=10&include_images=true";
     NSLog(@"fetching houses");
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         //NSLog(@"%@", object);
+        NSLog(@"Houses fetched");
         self.housesJsonArray = [object valueForKeyPath:@"collection"];
         NSArray *housesJsonArray = [object valueForKeyPath:@"collection"];
         for(int i = 0; i < housesJsonArray.count; i++) {
             NSDictionary *houseDict = [housesJsonArray objectAtIndex:i];
             House *house = [[House alloc] initWithDictionary:houseDict];
             [self.houses addObject:house];
+            
         }
-        self.start += self.houses.count;
+        self.start = self.houses.count;
         NSLog(@"houses Size %d start:%d", self.houses.count, self.start);
-        [self.tableView reloadData];
+        if( self.reloadRequired ) {
+            [self.tableView reloadData];
+        } else {
+            self.reloadRequired = true;
+        }
+        self.searchPreferanceChanged = false;
     }];
 }
 @end

@@ -12,7 +12,6 @@
 
 @interface HomeDetailsViewController : UIViewController
 @property (nonatomic, strong) House *house;
-- (IBAction)homeImageViewTapped:(UITapGestureRecognizer *)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *houseNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *houseBImageView;
