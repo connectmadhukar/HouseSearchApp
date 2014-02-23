@@ -8,6 +8,7 @@
 
 #import "HomeDetailsViewController.h"
 #import "AFNetworking.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface HomeDetailsViewController ()
 
@@ -30,8 +31,12 @@
     self.imgNumber = 0;
     self.houseNameLabel.text = self.house.name;
     [self.houseNameLabel sizeToFit];
-    self.houseFeaturesTextView.text = self.house.features;
-    [self.houseFeaturesTextView sizeToFit];
+    self.propertyFeaturesTable.delegate = self;
+    self.propertyFeaturesTable.dataSource = self;
+    [self.propertyFeaturesTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    self.propertyFeaturesTable.layer.borderWidth = 2;
+    self.propertyFeaturesTable.layer.borderColor = [[UIColor purpleColor] CGColor];
+
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     [self.houseBImageView setImage:image];
     CLLocationCoordinate2D coordinate;
@@ -64,12 +69,37 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.house.features.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self.propertyFeaturesTable dequeueReusableCellWithIdentifier:@"Cell"];
+    cell.textLabel.font = [UIFont fontWithName:@"ArialMT" size:9];
+    cell.textLabel.text = [self.house.features objectAtIndex:[indexPath row]];
+    return cell;
+}
+
 - (void) fetchImage:(NSURL *)imageUrl imageViewToLoadInto:(UIImageView *) imageView{
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor redColor];
+    CGRect rect = [imageView frame];
+    rect.origin.y =0;
+ //   NSLog(@" rect:%@", NSStringFromCGRect(rect));
+    activityIndicator.frame = rect;
+    [activityIndicator startAnimating];
+    [imageView addSubview:activityIndicator];
+    imageView.userInteractionEnabled = NO;
+    
     NSURLRequest *urlReq = [NSURLRequest requestWithURL:imageUrl];
     AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
     postOperation.responseSerializer = [AFImageResponseSerializer serializer];
     [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"Response: %@", responseObject);
+        //NSLog(@"Response: %@", imageUrl);
+        [activityIndicator stopAnimating];
+        [activityIndicator removeFromSuperview];
+        imageView.userInteractionEnabled = YES;
         imageView.image = responseObject;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -79,10 +109,19 @@
 }
 
 - (IBAction)homeImageViewTapped:(UITapGestureRecognizer *)sender {
+    NSLog(@"Location in View: %@", NSStringFromCGPoint([sender locationInView:self.houseBImageView]));
+    
     NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
     if(self.house.images.count != 0 && self.house.images.count != 1) {
-        self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
-            NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
+        NSInteger tchX = [sender locationInView:self.houseBImageView].x;
+        NSInteger ivCtrX = [self.houseBImageView center].x;
+        if( tchX < ivCtrX ) {
+          self.imgNumber = (self.imgNumber + self.house.images.count - 1 )% self.house.images.count;
+        } else {
+          self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
+        }
+        NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
+        
         [self fetchImage:[self.house.images objectAtIndex:self.imgNumber] imageViewToLoadInto:self.houseBImageView];
     }
 }

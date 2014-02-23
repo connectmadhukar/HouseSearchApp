@@ -10,14 +10,15 @@
 #import "House.h"
 #import <MapKit/MapKit.h>
 
-@interface HomeDetailsViewController : UIViewController
+@interface HomeDetailsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) House *house;
 
 @property (weak, nonatomic) IBOutlet UILabel *houseNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *houseBImageView;
-@property (weak, nonatomic) IBOutlet UITextView *houseFeaturesTextView;
-@property (nonatomic) int imgNumber;
+@property (weak, nonatomic) IBOutlet UITableView *propertyFeaturesTable;
 
 @property (weak, nonatomic) IBOutlet MKMapView *houseLocationMapView;
+
+@property (nonatomic) int imgNumber;
 
 @end

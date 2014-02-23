@@ -25,6 +25,7 @@
 @property (nonatomic) Boolean searchPreferanceChanged;
 @property (nonatomic, strong) PFObject *searchPreferance;
 
+
 - (void)logOutButtonTapAction;
 
 @end
@@ -61,6 +62,7 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"initWithCoder");
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.houses = [NSMutableArray array];
@@ -72,9 +74,35 @@
     return self;
 }
 
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    if( !self.searchPreferanceChanged) {
+        return;
+    }
+    
+    PFQuery *query = [SearchPreferance query];
+    [query includeKey:@"user"];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error && [objects count]>0) {
+            self.searchPreferance = objects[0];
+            NSLog(@"search Preferance:%@", self.searchPreferance);
+            //[self fetchMoreData];
+        } else {
+            self.searchPreferance = [PFObject objectWithClassName:@"SearchPreferance"];
+        }
+        self.houses = [NSMutableArray array];
+        self.start = 0;
+        self.reloadRequired = true;
+        [self fetchMoreData];
+    }];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(logOutButtonTapAction)];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,8 +120,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    //MovieCell *movieCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    //NSLog(@"cellForRowAtIndexPath");
     House *house = [self.houses objectAtIndex:indexPath.row];
     static NSString *cellIdentifier = @"HouseCell";
     
@@ -102,6 +129,7 @@
     if (cell == nil) {
         cell = [[HouseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    
     cell.addressLabel.text = house.address;
     [cell.addressLabel sizeToFit];
     cell.cityLabel.text = house.city;
@@ -111,26 +139,30 @@
     cell.stateLabel.text = house.state;
     [cell.stateLabel sizeToFit];
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
+    //UIImage *aiImage = [UIImage imageNamed: @"activityIndicator.gif"];
     [cell.houseImageView setImage:image];
+    //[cell.houseImageView setImage:aiImage];
     if(house.images.count != 0 ) {
        [self fetchImage:[house.images objectAtIndex:0] imageViewToLoadInto:cell.houseImageView];
     }
-    
+    /*
     if(( self.houses.count - indexPath.row) < 5 ) {
         self.reloadRequired = false;
         [self fetchMoreData];
     }
-     
+     */
     return cell;
 }
 
 
 - (void) fetchImage:(NSURL *)imageUrl imageViewToLoadInto:(UIImageView *) imageView{
+
     NSURLRequest *urlReq = [NSURLRequest requestWithURL:imageUrl];
     AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
     postOperation.responseSerializer = [AFImageResponseSerializer serializer];
     [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"Response: %@", responseObject);
+
         imageView.image = responseObject;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -143,47 +175,6 @@
     // Return the number of sections.
     return 1;
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 
 #pragma mark - Navigation
@@ -250,52 +241,44 @@
 
 
 #pragma mark - ()
-
 - (void)logOutButtonTapAction {
     NSLog(@"log out clicked");
     [PFUser logOut];
     [self viewDidAppear:true];
 }
 
-
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     if (bottomEdge >= scrollView.contentSize.height) {
-        NSLog(@"scrollViewDidEndDecelerating");
-        //self.reloadRequired = false;
-        //[self fetchMoreData];
+        //NSLog(@"scrollViewDidEndDecelerating");
+        self.reloadRequired = true;
+        [self fetchMoreData];
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
-    if( !self.searchPreferanceChanged) {
-        return;
-    }
-    PFQuery *query = [SearchPreferance query];
-    [query includeKey:@"user"];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error && [objects count]>0) {
-            self.searchPreferance = objects[0];
-            NSLog(@"search Preferance:%@", self.searchPreferance);
-            //[self fetchMoreData];
-        } else {
-            self.searchPreferance = [PFObject objectWithClassName:@"SearchPreferance"];
-        }
-        self.houses = [NSMutableArray array];
-        self.start = 0;
-        [self fetchMoreData];
-    }];
-}
 
 -(void)searchWithPreferance:(SearchPreferance *)searchPreferance {
     self.searchPreferance = searchPreferance;
-    NSLog(@"searchPreferanceChanged");
+    //NSLog(@"searchPreferanceChanged");
     self.searchPreferanceChanged = true;
+    self.reloadRequired = true;
 }
 
 - (void) fetchMoreData {
+    
+    UIActivityIndicatorView *activityIndicator ;
+    if( self.searchPreferanceChanged ) {
+        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        activityIndicator.color = [UIColor redColor];
+        CGRect rect = [self.tableView frame];
+        rect.origin.y =0;
+        
+        activityIndicator.frame = rect;
+        [activityIndicator startAnimating];
+        [self.tableView addSubview:activityIndicator];
+        self.tableView.userInteractionEnabled = NO;
+    }
+
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&limit=10&include_images=true&offset=%d", self.start]];
     
@@ -320,12 +303,12 @@
     url = [NSURL URLWithString:urlString];
     
     //NSString *url = @"http://www.rentmetrics.com/api/v1/apartments.json?address=Sunnyvale,CA&api_token=TEST&offset=0&limit=10&include_images=true";
-    NSLog(@"fetching houses");
+    //NSLog(@"fetching houses");
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         //NSLog(@"%@", object);
-        NSLog(@"Houses fetched");
+        //NSLog(@"Houses fetched");
         self.housesJsonArray = [object valueForKeyPath:@"collection"];
         NSArray *housesJsonArray = [object valueForKeyPath:@"collection"];
         for(int i = 0; i < housesJsonArray.count; i++) {
@@ -335,13 +318,21 @@
             
         }
         self.start = self.houses.count;
-        NSLog(@"houses Size %d start:%d", self.houses.count, self.start);
+        //NSLog(@"houses Size %d start:%d", self.houses.count, self.start);
         if( self.reloadRequired ) {
             [self.tableView reloadData];
+            self.reloadRequired = false;
         } else {
             self.reloadRequired = true;
         }
-        self.searchPreferanceChanged = false;
+        if( self.searchPreferanceChanged ) {
+            [activityIndicator stopAnimating];
+            [activityIndicator removeFromSuperview];
+            self.tableView.userInteractionEnabled = YES;
+            self.searchPreferanceChanged = false;
+        }
+
+
     }];
 }
 @end

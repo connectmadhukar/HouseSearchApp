@@ -12,12 +12,21 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSString *parseAppId = @"3E7FbZEgSE60bkc4DnDGVyB0EzNgSCPCc9v52KMz";
     NSString *parseClientKey = @"XHcCviJYBFI0sDy4xYLWCA9T1E6HSVqr7BMheWlr";
     [SearchPreferance registerSubclass];
     [Parse setApplicationId:parseAppId clientKey:parseClientKey];
+
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+//    NSString *parseAppId = @"3E7FbZEgSE60bkc4DnDGVyB0EzNgSCPCc9v52KMz";
+//    NSString *parseClientKey = @"XHcCviJYBFI0sDy4xYLWCA9T1E6HSVqr7BMheWlr";
+//    [SearchPreferance registerSubclass];
+//    [Parse setApplicationId:parseAppId clientKey:parseClientKey];
 
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|

@@ -29,6 +29,16 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    UIActivityIndicatorView *activityIndicator ;
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor redColor];
+    CGRect rect = [self.view frame];
+    activityIndicator.frame = rect;
+    [activityIndicator startAnimating];
+    [self.view addSubview:activityIndicator];
+    self.view.userInteractionEnabled = NO;
+
+
     PFQuery *query = [SearchPreferance query];
     [query includeKey:@"user"];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -42,6 +52,10 @@
         } else {
             self.searchPreferance = [PFObject objectWithClassName:@"SearchPreferance"];
         }
+        [activityIndicator stopAnimating];
+        [activityIndicator removeFromSuperview];
+        self.view.userInteractionEnabled = YES;
+
     }];
 }
 
