@@ -70,19 +70,7 @@
     [self.houseBImageView addGestureRecognizer:singleTap];
     [self.houseBImageView setUserInteractionEnabled:YES];
     
-    PFQuery *query = [FavHouse query];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query whereKey:@"propName" equalTo:self.house.propName];
-    [query whereKey:@"address" equalTo:self.house.address];
-    [query whereKey:@"city" equalTo:self.house.city];
-    [query whereKey:@"zipCode" equalTo:self.house.zipCode];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error && [objects count]>0) {
-            self.markFavBtn.selected = true;
-        } else {
-            self.markFavBtn.selected = false;
-        }
-    }];
+    [self findFavHouse];
 
 }
 
@@ -162,17 +150,51 @@
 }
 - (IBAction)markOrUnMarkFav:(id)sender {
     NSLog(@" markOrUnMarkFav Button Pressed");
-    FavHouse *favHouse = [FavHouse object];
-    [favHouse initFromHouse:self.house];
-    favHouse[@"user"] = [PFUser currentUser];
-    [favHouse saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if(succeeded) {
-            NSLog(@"succeeded");
-        } else {
-            NSLog(@"error");
-        }
-    }];
-    self.markFavBtn.selected = true;
+    [self.markFavBtn setUserInteractionEnabled:NO];
+    if(self.markFavBtn.selected) {
+        [self.favHouse deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(succeeded) {
+                
+            } else {
+                self.markFavBtn.selected = true;
+                NSLog(@"error");
+            }
+            [self.markFavBtn setUserInteractionEnabled:YES];
+        }];
+        self.markFavBtn.selected = false;
+    } else {
+        FavHouse *favHouse = [FavHouse object];
+        [favHouse initFromHouse:self.house];
+        favHouse[@"user"] = [PFUser currentUser];
+        [favHouse saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(succeeded) {
+                NSLog(@"succeeded");
+                [self findFavHouse];
+            } else {
+                self.markFavBtn.selected = false;
+                NSLog(@"error");
+            }
+            [self.markFavBtn setUserInteractionEnabled:YES];
+        }];
+        self.markFavBtn.selected = true;
+    }
 }
 
+- (void) findFavHouse {
+    PFQuery *query = [FavHouse query];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query whereKey:@"propName" equalTo:self.house.propName];
+    [query whereKey:@"address" equalTo:self.house.address];
+    [query whereKey:@"city" equalTo:self.house.city];
+    [query whereKey:@"zipCode" equalTo:self.house.zipCode];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error && [objects count]>0) {
+            self.markFavBtn.selected = true;
+            self.favHouse = objects[0];
+        } else {
+            self.markFavBtn.selected = false;
+        }
+    }];
+}
 @end

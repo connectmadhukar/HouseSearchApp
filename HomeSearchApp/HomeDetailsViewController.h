@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "House.h"
+#import "FavHouse.h"
 #import <MapKit/MapKit.h>
 
 @interface HomeDetailsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) House *house;
-
+@property (nonatomic, strong) FavHouse *favHouse;
 @property (weak, nonatomic) IBOutlet UILabel *houseNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *houseBImageView;
 @property (weak, nonatomic) IBOutlet UITableView *propertyFeaturesTable;

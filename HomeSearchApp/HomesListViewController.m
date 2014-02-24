@@ -173,7 +173,7 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSLog(@"id: %@", segue.identifier);
+    //NSLog(@"id: %@", segue.identifier);
     if( segue.identifier != nil && [segue.identifier compare:@"GoToRefineSearch"] == 0) {
         RefineViewController *refineViewController = (RefineViewController *)segue.destinationViewController;
         refineViewController.delegate = self;
