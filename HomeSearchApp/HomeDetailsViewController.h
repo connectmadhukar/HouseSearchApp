@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *propertyFeaturesTable;
 
 @property (weak, nonatomic) IBOutlet MKMapView *houseLocationMapView;
+@property (weak, nonatomic) IBOutlet UITableView *propertyConfigsTable;
+@property (weak, nonatomic) IBOutlet UIButton *markFavBtn;
+- (IBAction)markOrUnMarkFav:(id)sender;
 
 @property (nonatomic) int imgNumber;
 

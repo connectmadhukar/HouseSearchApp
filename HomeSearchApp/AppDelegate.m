@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "SearchPreferance.h"
+#import "FavHouse.h"
+#import "FavHouseConfigs.h"
 
 @implementation AppDelegate
 
@@ -16,6 +18,8 @@
     NSString *parseAppId = @"3E7FbZEgSE60bkc4DnDGVyB0EzNgSCPCc9v52KMz";
     NSString *parseClientKey = @"XHcCviJYBFI0sDy4xYLWCA9T1E6HSVqr7BMheWlr";
     [SearchPreferance registerSubclass];
+    [FavHouse registerSubclass];
+    [FavHouseConfigs registerSubclass];
     [Parse setApplicationId:parseAppId clientKey:parseClientKey];
 
     return YES;

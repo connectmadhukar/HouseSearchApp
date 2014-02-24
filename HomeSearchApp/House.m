@@ -7,14 +7,17 @@
 //
 
 #import "House.h"
+#import "HouseConfigs.h"
 
 @implementation House
+
+
 - (id)initWithDictionary:(NSDictionary *) dictionary {
-    self.name = [dictionary objectForKey:@"name"];
+    self.propName = [dictionary objectForKey:@"name"];
 
     self.address = [dictionary objectForKey:@"address"];
-    if ( self.name == (id)[NSNull null] || self.name.length == 0) {
-        self.name = self.address;
+    if ( self.propName == (id)[NSNull null] || self.propName.length == 0) {
+        self.propName = self.address;
     }
     self.city = [dictionary objectForKey:@"city"];
     self.zipCode = [dictionary objectForKey:@"zip_code"];
@@ -28,7 +31,7 @@
     NSArray *images = [dictionary objectForKey:@"images"];
     self.images = [NSMutableArray array];
     for (int i = 0; i < images.count; i++) {
-        NSURL *url = [NSURL URLWithString:(NSString *) [images[i] objectForKey:@"url"]];
+        NSString *url = [images[i] objectForKey:@"url"];
         [self.images addObject: url];
     }
     //NSLog(@"Images count: %d", self.images.count);
@@ -40,11 +43,10 @@
     NSArray *propCfgsJsonArray = [dictionary objectForKey:@"latest_prices"];
     self.propertyConfigs = [NSMutableArray array];
     for (int i = 0; i < propCfgsJsonArray.count; i++) {
-        NSDictionary *houseDict = [propCfgsJsonArray objectAtIndex:i];
-        House *house = [[House alloc] initWithDictionary:houseDict];
-        [self.propertyConfigs addObject:features[i]];
+        NSDictionary *houseCfgsDict = [propCfgsJsonArray objectAtIndex:i];
+        HouseConfigs *houseCfg = [[HouseConfigs alloc] initWithDictionary:houseCfgsDict];
+        [self.propertyConfigs addObject:houseCfg];
     }
-
     return self;
 }
 

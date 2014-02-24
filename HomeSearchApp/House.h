@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HouseConfigs.h"
 
 @interface House : NSObject
-@property (nonatomic, strong) NSString *name;
+
+@property (nonatomic, strong) NSString *propName;
 @property (nonatomic, strong) NSString *address;
 @property (nonatomic, strong) NSString *city;
 @property (nonatomic, strong) NSString *zipCode;

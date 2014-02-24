@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Madhukar Mulpuri. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
 @interface SearchPreferance : PFObject<PFSubclassing>

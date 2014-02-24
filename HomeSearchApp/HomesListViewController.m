@@ -76,7 +76,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
+    //NSLog(@"view will appear");
     if( !self.searchPreferanceChanged) {
         return;
     }
@@ -143,7 +143,7 @@
     [cell.houseImageView setImage:image];
     //[cell.houseImageView setImage:aiImage];
     if(house.images.count != 0 ) {
-       [self fetchImage:[house.images objectAtIndex:0] imageViewToLoadInto:cell.houseImageView];
+        [self fetchImage:[NSURL URLWithString:[house.images objectAtIndex:0]] imageViewToLoadInto:cell.houseImageView];
     }
     /*
     if(( self.houses.count - indexPath.row) < 5 ) {
@@ -170,12 +170,6 @@
     }];
     [postOperation start];
 }
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
-}
-
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

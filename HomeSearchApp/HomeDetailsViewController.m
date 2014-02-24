@@ -9,6 +9,8 @@
 #import "HomeDetailsViewController.h"
 #import "AFNetworking.h"
 #import <QuartzCore/QuartzCore.h>
+#import "HouseConfigs.h"
+#import "FavHouse.h"
 
 @interface HomeDetailsViewController ()
 
@@ -17,8 +19,7 @@
 
 @implementation HomeDetailsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -29,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.imgNumber = 0;
-    self.houseNameLabel.text = self.house.name;
+    self.houseNameLabel.text = self.house.propName;
     [self.houseNameLabel sizeToFit];
     self.propertyFeaturesTable.delegate = self;
     self.propertyFeaturesTable.dataSource = self;
@@ -37,6 +38,13 @@
     self.propertyFeaturesTable.layer.borderWidth = 2;
     self.propertyFeaturesTable.layer.borderColor = [[UIColor purpleColor] CGColor];
 
+    self.propertyConfigsTable.delegate = self;
+    self.propertyConfigsTable.dataSource = self;
+    [self.propertyConfigsTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ConfigCell"];
+    self.propertyConfigsTable.layer.borderWidth = 2;
+    self.propertyConfigsTable.layer.borderColor = [[UIColor purpleColor] CGColor];
+    
+    
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     [self.houseBImageView setImage:image];
     CLLocationCoordinate2D coordinate;
@@ -54,13 +62,28 @@
     [self.houseLocationMapView setRegion:region animated:YES];
     
     if(self.house.images.count != 0 ) {
-        [self fetchImage:[self.house.images objectAtIndex:0] imageViewToLoadInto:self.houseBImageView];
+        [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:0]] imageViewToLoadInto:self.houseBImageView];
     }
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(homeImageViewTapped:)];
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.houseBImageView addGestureRecognizer:singleTap];
     [self.houseBImageView setUserInteractionEnabled:YES];
+    
+    PFQuery *query = [FavHouse query];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query whereKey:@"propName" equalTo:self.house.propName];
+    [query whereKey:@"address" equalTo:self.house.address];
+    [query whereKey:@"city" equalTo:self.house.city];
+    [query whereKey:@"zipCode" equalTo:self.house.zipCode];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error && [objects count]>0) {
+            self.markFavBtn.selected = true;
+        } else {
+            self.markFavBtn.selected = false;
+        }
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -71,13 +94,25 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.house.features.count;
+    if (tableView == self.propertyFeaturesTable) {
+        return self.house.features.count;
+    } else {
+        return self.house.propertyConfigs.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self.propertyFeaturesTable dequeueReusableCellWithIdentifier:@"Cell"];
+    UITableViewCell *cell;
+    if (tableView == self.propertyFeaturesTable) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+        cell.textLabel.text = [self.house.features objectAtIndex:[indexPath row]];
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"ConfigCell"];
+        HouseConfigs *houseCfg = [self.house.propertyConfigs objectAtIndex:[indexPath row]];
+        NSString *cfgString = [NSString stringWithFormat:@"%@ - %@ sft - $%@", houseCfg.bedrooms, houseCfg.sqFt, houseCfg.rent];
+        cell.textLabel.text = cfgString;
+    }
     cell.textLabel.font = [UIFont fontWithName:@"ArialMT" size:9];
-    cell.textLabel.text = [self.house.features objectAtIndex:[indexPath row]];
     return cell;
 }
 
@@ -109,9 +144,9 @@
 }
 
 - (IBAction)homeImageViewTapped:(UITapGestureRecognizer *)sender {
-    NSLog(@"Location in View: %@", NSStringFromCGPoint([sender locationInView:self.houseBImageView]));
+    //NSLog(@"Location in View: %@", NSStringFromCGPoint([sender locationInView:self.houseBImageView]));
     
-    NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
+    //NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
     if(self.house.images.count != 0 && self.house.images.count != 1) {
         NSInteger tchX = [sender locationInView:self.houseBImageView].x;
         NSInteger ivCtrX = [self.houseBImageView center].x;
@@ -120,9 +155,24 @@
         } else {
           self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
         }
-        NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
+        //NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
         
-        [self fetchImage:[self.house.images objectAtIndex:self.imgNumber] imageViewToLoadInto:self.houseBImageView];
+        [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:self.imgNumber]] imageViewToLoadInto:self.houseBImageView];
     }
 }
+- (IBAction)markOrUnMarkFav:(id)sender {
+    NSLog(@" markOrUnMarkFav Button Pressed");
+    FavHouse *favHouse = [FavHouse object];
+    [favHouse initFromHouse:self.house];
+    favHouse[@"user"] = [PFUser currentUser];
+    [favHouse saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if(succeeded) {
+            NSLog(@"succeeded");
+        } else {
+            NSLog(@"error");
+        }
+    }];
+    self.markFavBtn.selected = true;
+}
+
 @end
