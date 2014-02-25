@@ -14,6 +14,9 @@
 #import <Parse/Parse.h>
 #import "AFNetworking.h"
 #import "SearchPreferance.h"
+#import "HSLogInViewController.h"
+#import "HSSignUpViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @interface HomesListViewController ()
@@ -45,12 +48,12 @@
     [super viewDidAppear:animated];
     if (![PFUser currentUser]) { // No user logged in
         // Create the log in view controller
-        PFLogInViewController *logInViewController = [[PFLogInViewController alloc] init];
+        PFLogInViewController *logInViewController = [[HSLogInViewController alloc] init];
         [logInViewController setDelegate:self]; // Set ourselves as the delegate
-        logInViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton;
+        logInViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton;
         // Create the sign up view controller
         
-        PFSignUpViewController *signUpViewController = [[PFSignUpViewController alloc] init];
+        PFSignUpViewController *signUpViewController = [[HSSignUpViewController alloc] init];
         [signUpViewController setDelegate:self]; // Set ourselves as the delegate
         
         // Assign our sign up controller to be displayed from the login controller
@@ -77,7 +80,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     //NSLog(@"view will appear");
-    if( !self.searchPreferanceChanged) {
+    if( !self.searchPreferanceChanged ||  ![PFUser currentUser]) {
         return;
     }
     
@@ -141,6 +144,8 @@
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     //UIImage *aiImage = [UIImage imageNamed: @"activityIndicator.gif"];
     [cell.houseImageView setImage:image];
+    cell.houseImageView.layer.cornerRadius = 25.0;
+    cell.houseImageView.layer.masksToBounds = YES;
     //[cell.houseImageView setImage:aiImage];
     if(house.images.count != 0 ) {
         [self fetchImage:[NSURL URLWithString:[house.images objectAtIndex:0]] imageViewToLoadInto:cell.houseImageView];

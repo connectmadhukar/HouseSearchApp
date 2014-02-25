@@ -1,20 +1,20 @@
 //
-//  HSLogInViewController.m
+//  HSSignUpViewController.m
 //  HomeSearchApp
 //
 //  Created by Madhukar Mulpuri on 2/25/14.
 //  Copyright (c) 2014 Madhukar Mulpuri. All rights reserved.
 //
 
-#import "HSLogInViewController.h"
+#import "HSSignUpViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Parse/Parse.h>
 
-@interface HSLogInViewController ()
+@interface HSSignUpViewController ()
 
 @end
 
-@implementation HSLogInViewController
+@implementation HSSignUpViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,18 +28,21 @@
     UIImageView *logo = [[UIImageView alloc] initWithImage:image];
     logo.layer.cornerRadius = 25.0;
     logo.layer.masksToBounds = YES;
-    self.logInView.logo = logo; // logo can be any UIView
+    self.signUpView.logo = logo;
 }
+
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.logInView.usernameField.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.6];
-    
-    self.logInView.usernameField.layer.cornerRadius=20.0f;
-    self.logInView.passwordField.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.6];
-    self.logInView.passwordField.layer.cornerRadius=20.0f;
+    self.signUpView.usernameField.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.6];
+    self.signUpView.usernameField.layer.cornerRadius=20.0f;
 
-    
+    self.signUpView.passwordField.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.4 alpha:0.6];
+    self.signUpView.passwordField.layer.cornerRadius=20.0f;
+
+    self.signUpView.emailField.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.6 alpha:0.6];
+    self.signUpView.emailField.layer.cornerRadius=20.0f;
 }
+
 
 @end

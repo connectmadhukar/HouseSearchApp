@@ -61,6 +61,11 @@
 		D597CE6818BC88CD003280B1 /* homeLeft_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6618BC88CD003280B1 /* homeLeft_dis.png */; };
 		D597CE6918BC88CD003280B1 /* homeRight_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6718BC88CD003280B1 /* homeRight_dis.png */; };
 		D597CE6C18BC8FB2003280B1 /* HSLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */; };
+		D597CE6F18BC92C2003280B1 /* TheWay2Home_orig.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6D18BC92C2003280B1 /* TheWay2Home_orig.jpg */; };
+		D597CE7018BC92C2003280B1 /* TheWay2Home.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6E18BC92C2003280B1 /* TheWay2Home.jpg */; };
+		D597CE7318BC9AF9003280B1 /* homeSearch.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D597CE7118BC9AF9003280B1 /* homeSearch.jpeg */; };
+		D597CE7418BC9AF9003280B1 /* homeSearchSmall.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D597CE7218BC9AF9003280B1 /* homeSearchSmall.jpeg */; };
+		D597CE7718BC9C07003280B1 /* HSSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D597CE7618BC9C07003280B1 /* HSSignUpViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +160,12 @@
 		D597CE6718BC88CD003280B1 /* homeRight_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeRight_dis.png; sourceTree = "<group>"; };
 		D597CE6A18BC8FB1003280B1 /* HSLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSLogInViewController.h; sourceTree = "<group>"; };
 		D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSLogInViewController.m; sourceTree = "<group>"; };
+		D597CE6D18BC92C2003280B1 /* TheWay2Home_orig.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = TheWay2Home_orig.jpg; sourceTree = "<group>"; };
+		D597CE6E18BC92C2003280B1 /* TheWay2Home.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = TheWay2Home.jpg; sourceTree = "<group>"; };
+		D597CE7118BC9AF9003280B1 /* homeSearch.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = homeSearch.jpeg; sourceTree = "<group>"; };
+		D597CE7218BC9AF9003280B1 /* homeSearchSmall.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = homeSearchSmall.jpeg; sourceTree = "<group>"; };
+		D597CE7518BC9C07003280B1 /* HSSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSignUpViewController.h; sourceTree = "<group>"; };
+		D597CE7618BC9C07003280B1 /* HSSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSignUpViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +334,8 @@
 				D597CE5D18BBC5CD003280B1 /* BMHListViewController.m */,
 				D597CE6A18BC8FB1003280B1 /* HSLogInViewController.h */,
 				D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */,
+				D597CE7518BC9C07003280B1 /* HSSignUpViewController.h */,
+				D597CE7618BC9C07003280B1 /* HSSignUpViewController.m */,
 			);
 			name = ViewControllers;
 			path = ..;
@@ -357,6 +370,10 @@
 		D5284F1B18A0768E000E8CFB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				D597CE7118BC9AF9003280B1 /* homeSearch.jpeg */,
+				D597CE7218BC9AF9003280B1 /* homeSearchSmall.jpeg */,
+				D597CE6D18BC92C2003280B1 /* TheWay2Home_orig.jpg */,
+				D597CE6E18BC92C2003280B1 /* TheWay2Home.jpg */,
 				D597CE6618BC88CD003280B1 /* homeLeft_dis.png */,
 				D597CE6718BC88CD003280B1 /* homeRight_dis.png */,
 				D597CE6218BC7E9F003280B1 /* homeLeft.png */,
@@ -453,7 +470,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D597CE7418BC9AF9003280B1 /* homeSearchSmall.jpeg in Resources */,
 				D51FED3B18B9C4C1009B344D /* favorite_on.png in Resources */,
+				D597CE6F18BC92C2003280B1 /* TheWay2Home_orig.jpg in Resources */,
 				D597CE6518BC7E9F003280B1 /* homeRight.png in Resources */,
 				D51FED3C18B9C4C1009B344D /* favoriteDef.png in Resources */,
 				D5284EE2189F723F000E8CFB /* Main.storyboard in Resources */,
@@ -461,7 +480,9 @@
 				D597CE6818BC88CD003280B1 /* homeLeft_dis.png in Resources */,
 				D597CE6418BC7E9F003280B1 /* homeLeft.png in Resources */,
 				D51FED3A18B9C4C1009B344D /* favorite_hover.png in Resources */,
+				D597CE7018BC92C2003280B1 /* TheWay2Home.jpg in Resources */,
 				D5284EB2189EEC95000E8CFB /* InfoPlist.strings in Resources */,
+				D597CE7318BC9AF9003280B1 /* homeSearch.jpeg in Resources */,
 				D5284F1D18A0768E000E8CFB /* homeDeafult.jpeg in Resources */,
 				D597CE6918BC88CD003280B1 /* homeRight_dis.png in Resources */,
 				D5284EBA189EEC95000E8CFB /* Images.xcassets in Resources */,
@@ -486,6 +507,7 @@
 				D5284F1A18A04F29000E8CFB /* AFURLSessionManager.m in Sources */,
 				D5284EDD189EF19C000E8CFB /* HomeDetailsViewController.m in Sources */,
 				D5284EDA189EF12F000E8CFB /* HomesListViewController.m in Sources */,
+				D597CE7718BC9C07003280B1 /* HSSignUpViewController.m in Sources */,
 				D597CE6C18BC8FB2003280B1 /* HSLogInViewController.m in Sources */,
 				D5284F1518A04F29000E8CFB /* AFNetworkReachabilityManager.m in Sources */,
 				D5284EB8189EEC95000E8CFB /* AppDelegate.m in Sources */,

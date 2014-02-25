@@ -45,7 +45,8 @@
     singleTap.numberOfTouchesRequired = 1;
     [self.houseBImageView addGestureRecognizer:singleTap];
     [self.houseBImageView setUserInteractionEnabled:YES];
-    
+    self.houseBImageView.layer.cornerRadius = 20.0;
+    self.houseBImageView.layer.masksToBounds = YES;
 
     [self loadDetailsIntoView];
 }
@@ -57,6 +58,7 @@
     
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     [self.houseBImageView setImage:image];
+    
     CLLocationCoordinate2D coordinate;
     coordinate.latitude = [self.house.latitude doubleValue];
     coordinate.longitude = [self.house.longitude doubleValue];
