@@ -22,7 +22,12 @@
 @property (weak, nonatomic) IBOutlet UITableView *propertyConfigsTable;
 @property (weak, nonatomic) IBOutlet UIButton *markFavBtn;
 - (IBAction)markOrUnMarkFav:(id)sender;
+- (IBAction)leftArrowPressed:(id)sender;
+- (IBAction)rightArrowPressed:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *rightBtn;
+@property (weak, nonatomic) IBOutlet UIButton *leftBtn;
 
 @property (nonatomic) int imgNumber;
+
 
 @end

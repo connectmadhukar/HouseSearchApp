@@ -56,6 +56,11 @@
 		D5284F2F18B1C294000E8CFB /* SearchPreferance.m in Sources */ = {isa = PBXBuildFile; fileRef = D5284F2E18B1C294000E8CFB /* SearchPreferance.m */; };
 		D597CE5E18BBC5CD003280B1 /* BMHListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D597CE5D18BBC5CD003280B1 /* BMHListViewController.m */; };
 		D597CE6118BBCC1F003280B1 /* BMHCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D597CE6018BBCC1F003280B1 /* BMHCell.m */; };
+		D597CE6418BC7E9F003280B1 /* homeLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6218BC7E9F003280B1 /* homeLeft.png */; };
+		D597CE6518BC7E9F003280B1 /* homeRight.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6318BC7E9F003280B1 /* homeRight.png */; };
+		D597CE6818BC88CD003280B1 /* homeLeft_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6618BC88CD003280B1 /* homeLeft_dis.png */; };
+		D597CE6918BC88CD003280B1 /* homeRight_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = D597CE6718BC88CD003280B1 /* homeRight_dis.png */; };
+		D597CE6C18BC8FB2003280B1 /* HSLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +149,12 @@
 		D597CE5D18BBC5CD003280B1 /* BMHListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BMHListViewController.m; path = HomeSearchApp/BMHListViewController.m; sourceTree = "<group>"; };
 		D597CE5F18BBCC1F003280B1 /* BMHCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMHCell.h; sourceTree = "<group>"; };
 		D597CE6018BBCC1F003280B1 /* BMHCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMHCell.m; sourceTree = "<group>"; };
+		D597CE6218BC7E9F003280B1 /* homeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeLeft.png; sourceTree = "<group>"; };
+		D597CE6318BC7E9F003280B1 /* homeRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeRight.png; sourceTree = "<group>"; };
+		D597CE6618BC88CD003280B1 /* homeLeft_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeLeft_dis.png; sourceTree = "<group>"; };
+		D597CE6718BC88CD003280B1 /* homeRight_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeRight_dis.png; sourceTree = "<group>"; };
+		D597CE6A18BC8FB1003280B1 /* HSLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSLogInViewController.h; sourceTree = "<group>"; };
+		D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSLogInViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,6 +321,8 @@
 				D5284F2318AA2446000E8CFB /* RefineViewController.m */,
 				D597CE5C18BBC5CD003280B1 /* BMHListViewController.h */,
 				D597CE5D18BBC5CD003280B1 /* BMHListViewController.m */,
+				D597CE6A18BC8FB1003280B1 /* HSLogInViewController.h */,
+				D597CE6B18BC8FB2003280B1 /* HSLogInViewController.m */,
 			);
 			name = ViewControllers;
 			path = ..;
@@ -344,6 +357,10 @@
 		D5284F1B18A0768E000E8CFB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				D597CE6618BC88CD003280B1 /* homeLeft_dis.png */,
+				D597CE6718BC88CD003280B1 /* homeRight_dis.png */,
+				D597CE6218BC7E9F003280B1 /* homeLeft.png */,
+				D597CE6318BC7E9F003280B1 /* homeRight.png */,
 				D51FED3718B9C4C1009B344D /* favorite_hover.png */,
 				D51FED3818B9C4C1009B344D /* favorite_on.png */,
 				D51FED3918B9C4C1009B344D /* favoriteDef.png */,
@@ -437,12 +454,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				D51FED3B18B9C4C1009B344D /* favorite_on.png in Resources */,
+				D597CE6518BC7E9F003280B1 /* homeRight.png in Resources */,
 				D51FED3C18B9C4C1009B344D /* favoriteDef.png in Resources */,
 				D5284EE2189F723F000E8CFB /* Main.storyboard in Resources */,
 				D51FED3618B94A9C009B344D /* activityIndicator.gif in Resources */,
+				D597CE6818BC88CD003280B1 /* homeLeft_dis.png in Resources */,
+				D597CE6418BC7E9F003280B1 /* homeLeft.png in Resources */,
 				D51FED3A18B9C4C1009B344D /* favorite_hover.png in Resources */,
 				D5284EB2189EEC95000E8CFB /* InfoPlist.strings in Resources */,
 				D5284F1D18A0768E000E8CFB /* homeDeafult.jpeg in Resources */,
+				D597CE6918BC88CD003280B1 /* homeRight_dis.png in Resources */,
 				D5284EBA189EEC95000E8CFB /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,6 +486,7 @@
 				D5284F1A18A04F29000E8CFB /* AFURLSessionManager.m in Sources */,
 				D5284EDD189EF19C000E8CFB /* HomeDetailsViewController.m in Sources */,
 				D5284EDA189EF12F000E8CFB /* HomesListViewController.m in Sources */,
+				D597CE6C18BC8FB2003280B1 /* HSLogInViewController.m in Sources */,
 				D5284F1518A04F29000E8CFB /* AFNetworkReachabilityManager.m in Sources */,
 				D5284EB8189EEC95000E8CFB /* AppDelegate.m in Sources */,
 				D5284F1718A04F29000E8CFB /* AFURLConnectionOperation.m in Sources */,

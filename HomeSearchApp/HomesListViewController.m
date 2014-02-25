@@ -271,8 +271,8 @@
         
         activityIndicator.frame = rect;
         [activityIndicator startAnimating];
-        [self.tableView addSubview:activityIndicator];
-        self.tableView.userInteractionEnabled = NO;
+        [self.view addSubview:activityIndicator];
+        self.view.userInteractionEnabled = NO;
     }
 
     
@@ -324,7 +324,7 @@
         if( self.searchPreferanceChanged ) {
             [activityIndicator stopAnimating];
             [activityIndicator removeFromSuperview];
-            self.tableView.userInteractionEnabled = YES;
+            self.view.userInteractionEnabled = YES;
             self.searchPreferanceChanged = false;
         }
 

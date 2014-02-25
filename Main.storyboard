@@ -101,7 +101,7 @@
                             <rect key="frame" x="96" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="Bookmarked">
+                            <state key="normal" title="Bookmarks">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -365,7 +365,7 @@
                                     <constraint firstAttribute="height" constant="172" id="EWq-aO-DkK"/>
                                 </constraints>
                             </mapView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="12" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ElP-me-mgJ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="12" sectionHeaderHeight="22" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ElP-me-mgJ">
                                 <rect key="frame" x="165" y="221" width="147" height="165"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -373,7 +373,7 @@
                                     <constraint firstAttribute="height" constant="165" id="O9Z-4b-Pre"/>
                                 </constraints>
                             </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="12" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2ck-VU-BDS">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="12" sectionHeaderHeight="22" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="2ck-VU-BDS">
                                 <rect key="frame" x="5" y="221" width="150" height="165"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -397,6 +397,36 @@
                                     <action selector="markOrUnMarkFav:" destination="cNj-xk-Ocj" eventType="touchUpInside" id="l6s-U3-bYo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tdh-BT-gFt">
+                                <rect key="frame" x="5" y="69" width="40" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="8i4-NR-weB"/>
+                                    <constraint firstAttribute="width" constant="40" id="p0B-nT-Tc9"/>
+                                </constraints>
+                                <state key="normal" image="homeLeft.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="disabled" image="homeLeft_dis.png"/>
+                                <connections>
+                                    <action selector="leftArrowPressed:" destination="cNj-xk-Ocj" eventType="touchUpInside" id="lLk-Lz-pkO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sL2-VP-mbe">
+                                <rect key="frame" x="275" y="69" width="40" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="cbn-9I-uXV"/>
+                                    <constraint firstAttribute="height" constant="25" id="eh5-rw-gSi"/>
+                                </constraints>
+                                <state key="normal" image="homeRight.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="disabled" image="homeRight_dis.png"/>
+                                <connections>
+                                    <action selector="rightArrowPressed:" destination="cNj-xk-Ocj" eventType="touchUpInside" id="2Nx-ox-KAe"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -410,6 +440,10 @@
                             <constraint firstAttribute="trailing" secondItem="EuX-F4-Bqn" secondAttribute="trailing" constant="5" id="Jjh-fN-F1W"/>
                             <constraint firstItem="JlN-yn-LfA" firstAttribute="top" secondItem="2ck-VU-BDS" secondAttribute="bottom" constant="5" id="M5M-7a-C8c"/>
                             <constraint firstItem="ElP-me-mgJ" firstAttribute="top" secondItem="EuX-F4-Bqn" secondAttribute="bottom" constant="5" id="PIP-tp-bOp"/>
+                            <constraint firstItem="sL2-VP-mbe" firstAttribute="top" secondItem="rSg-fp-XZe" secondAttribute="bottom" constant="5" id="Z82-8l-zsC"/>
+                            <constraint firstItem="tdh-BT-gFt" firstAttribute="leading" secondItem="tgl-Tg-mTP" secondAttribute="leading" constant="5" id="bKE-fg-NS0"/>
+                            <constraint firstAttribute="trailing" secondItem="sL2-VP-mbe" secondAttribute="trailing" constant="5" id="gQX-rA-kLs"/>
+                            <constraint firstItem="tdh-BT-gFt" firstAttribute="top" secondItem="rSg-fp-XZe" secondAttribute="bottom" constant="5" id="jJA-06-Ffi"/>
                             <constraint firstItem="TLb-Nj-Lvi" firstAttribute="leading" secondItem="ADp-5U-MBa" secondAttribute="trailing" constant="5" id="lwX-J4-M5D"/>
                             <constraint firstItem="EuX-F4-Bqn" firstAttribute="top" secondItem="TLb-Nj-Lvi" secondAttribute="bottom" constant="5" id="nsi-EO-wmv"/>
                             <constraint firstItem="EuX-F4-Bqn" firstAttribute="top" secondItem="ADp-5U-MBa" secondAttribute="bottom" constant="5" id="qpm-Ci-IG3"/>
@@ -424,9 +458,11 @@
                         <outlet property="houseBImageView" destination="EuX-F4-Bqn" id="5Gq-Io-Jdf"/>
                         <outlet property="houseLocationMapView" destination="JlN-yn-LfA" id="FFL-jQ-T1h"/>
                         <outlet property="houseNameLabel" destination="ADp-5U-MBa" id="PLO-TJ-O2N"/>
+                        <outlet property="leftBtn" destination="tdh-BT-gFt" id="PWB-kI-FZt"/>
                         <outlet property="markFavBtn" destination="TLb-Nj-Lvi" id="cb4-fI-VpL"/>
                         <outlet property="propertyConfigsTable" destination="2ck-VU-BDS" id="sLW-NC-9Zw"/>
                         <outlet property="propertyFeaturesTable" destination="ElP-me-mgJ" id="3Bj-Oh-coT"/>
+                        <outlet property="rightBtn" destination="sL2-VP-mbe" id="piB-Oe-5fM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX2-Jh-x0J" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -456,6 +492,10 @@
         <image name="favoriteDef.png" width="16" height="16"/>
         <image name="favorite_hover.png" width="16" height="16"/>
         <image name="favorite_on.png" width="16" height="16"/>
+        <image name="homeLeft.png" width="256" height="256"/>
+        <image name="homeLeft_dis.png" width="256" height="256"/>
+        <image name="homeRight.png" width="256" height="256"/>
+        <image name="homeRight_dis.png" width="256" height="256"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -463,6 +503,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="YnK-YQ-L7V"/>
+        <segue reference="h8f-Vo-K3T"/>
     </inferredMetricsTieBreakers>
 </document>

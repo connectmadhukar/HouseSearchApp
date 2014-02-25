@@ -14,7 +14,6 @@
 
 @interface HomeDetailsViewController ()
 
-
 @end
 
 @implementation HomeDetailsViewController
@@ -29,21 +28,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.imgNumber = 0;
-    self.houseNameLabel.text = self.house.propName;
-    [self.houseNameLabel sizeToFit];
     self.propertyFeaturesTable.delegate = self;
     self.propertyFeaturesTable.dataSource = self;
     [self.propertyFeaturesTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     self.propertyFeaturesTable.layer.borderWidth = 2;
     self.propertyFeaturesTable.layer.borderColor = [[UIColor purpleColor] CGColor];
-
+    
     self.propertyConfigsTable.delegate = self;
     self.propertyConfigsTable.dataSource = self;
     [self.propertyConfigsTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ConfigCell"];
     self.propertyConfigsTable.layer.borderWidth = 2;
     self.propertyConfigsTable.layer.borderColor = [[UIColor purpleColor] CGColor];
     
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(homeImageViewTapped:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [self.houseBImageView addGestureRecognizer:singleTap];
+    [self.houseBImageView setUserInteractionEnabled:YES];
+    
+
+    [self loadDetailsIntoView];
+}
+
+- (void) loadDetailsIntoView {
+    self.imgNumber = 0;
+    self.houseNameLabel.text = self.house.propName;
+    [self.houseNameLabel sizeToFit];
     
     UIImage *image = [UIImage imageNamed: @"homeDeafult.jpeg"];
     [self.houseBImageView setImage:image];
@@ -52,26 +62,24 @@
     coordinate.longitude = [self.house.longitude doubleValue];
     
     MKPlacemark *mPlacemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil] ;
-   [self.houseLocationMapView addAnnotation:mPlacemark];
-
+    [self.houseLocationMapView addAnnotation:mPlacemark];
+    
     MKCoordinateRegion region;
     region.center.latitude = [self.house.latitude doubleValue];
     region.center.longitude = [self.house.longitude doubleValue];
     region.span.latitudeDelta = 0.05;
     region.span.longitudeDelta = 0.05;
     [self.houseLocationMapView setRegion:region animated:YES];
-    
+    self.leftBtn.enabled = NO;
+    self.rightBtn.enabled = YES;
+
+    if(self.house.images.count <= 1) {
+       self.rightBtn.enabled = NO;
+    }
     if(self.house.images.count != 0 ) {
         [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:0]] imageViewToLoadInto:self.houseBImageView];
     }
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(homeImageViewTapped:)];
-    singleTap.numberOfTapsRequired = 1;
-    singleTap.numberOfTouchesRequired = 1;
-    [self.houseBImageView addGestureRecognizer:singleTap];
-    [self.houseBImageView setUserInteractionEnabled:YES];
-    
     [self findFavHouse];
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,10 +113,17 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"My Title";
+    if (tableView == self.propertyFeaturesTable) {
+        return @"Features";
+    } else {
+        return @"Rooms Area Rent";
+    }
 }
 
 - (void) fetchImage:(NSURL *)imageUrl imageViewToLoadInto:(UIImageView *) imageView{
+    imageView.userInteractionEnabled = NO;
+    self.rightBtn.userInteractionEnabled = NO;
+    self.leftBtn.userInteractionEnabled = NO;
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityIndicator.color = [UIColor redColor];
     CGRect rect = [imageView frame];
@@ -117,25 +132,25 @@
     activityIndicator.frame = rect;
     [activityIndicator startAnimating];
     [imageView addSubview:activityIndicator];
-    imageView.userInteractionEnabled = NO;
     
     NSURLRequest *urlReq = [NSURLRequest requestWithURL:imageUrl];
     AFHTTPRequestOperation *postOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlReq];
     postOperation.responseSerializer = [AFImageResponseSerializer serializer];
     [postOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"Response: %@", imageUrl);
+        imageView.image = responseObject;
         [activityIndicator stopAnimating];
         [activityIndicator removeFromSuperview];
         imageView.userInteractionEnabled = YES;
-        imageView.image = responseObject;
-        
+        self.rightBtn.userInteractionEnabled = YES;
+        self.leftBtn.userInteractionEnabled = YES;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Image error: %@", error);
     }];
     [postOperation start];
 }
 
-- (IBAction)homeImageViewTapped:(UITapGestureRecognizer *)sender {
+- (void)homeImageViewTapped:(UITapGestureRecognizer *)sender {
     //NSLog(@"Location in View: %@", NSStringFromCGPoint([sender locationInView:self.houseBImageView]));
     
     //NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
@@ -148,10 +163,20 @@
           self.imgNumber = (self.imgNumber +1 )% self.house.images.count;
         }
         //NSLog(@"self.house.images.count:%d self.imgNumber:%d", self.house.images.count , self.imgNumber);
-        
+        if( self.imgNumber  ==0 ) {
+            self.leftBtn.enabled = NO;
+            self.rightBtn.enabled = YES;
+        } else if( self.imgNumber == (self.house.images.count - 1)) {
+            self.leftBtn.enabled = YES;
+            self.rightBtn.enabled = NO;
+        } else {
+            self.rightBtn.enabled = YES;
+            self.leftBtn.enabled = YES;
+        }
         [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:self.imgNumber]] imageViewToLoadInto:self.houseBImageView];
     }
 }
+
 - (IBAction)markOrUnMarkFav:(id)sender {
     NSLog(@" markOrUnMarkFav Button Pressed");
     [self.markFavBtn setUserInteractionEnabled:NO];
@@ -184,7 +209,33 @@
     }
 }
 
+- (IBAction)leftArrowPressed:(id)sender {
+    
+    self.imgNumber = (self.imgNumber - 1 );
+    if( self.imgNumber  ==0 ) {
+        self.leftBtn.enabled = NO;
+    } else {
+        self.rightBtn.enabled = YES;
+        self.leftBtn.enabled = YES;
+    }
+    [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:self.imgNumber]] imageViewToLoadInto:self.houseBImageView];
+
+}
+
+- (IBAction)rightArrowPressed:(id)sender {
+    self.imgNumber = (self.imgNumber +1 );
+    if( self.imgNumber == (self.house.images.count - 1)) {
+        self.leftBtn.enabled = YES;
+        self.rightBtn.enabled = NO;
+    } else {
+        self.rightBtn.enabled = YES;
+        self.leftBtn.enabled = YES;
+    }
+    [self fetchImage:[NSURL URLWithString:[self.house.images objectAtIndex:self.imgNumber]] imageViewToLoadInto:self.houseBImageView];
+}
+
 - (void) findFavHouse {
+    [self.markFavBtn setUserInteractionEnabled:NO];
     PFQuery *query = [FavHouse query];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
     [query whereKey:@"propName" equalTo:self.house.propName];
@@ -199,6 +250,7 @@
         } else {
             self.markFavBtn.selected = false;
         }
+        [self.markFavBtn setUserInteractionEnabled:YES];
     }];
 }
 @end

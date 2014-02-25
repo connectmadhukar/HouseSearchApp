@@ -152,12 +152,12 @@
         if (!error && [objects count]>0) {
             for(int i = 0; i < objects.count; i++) {
                 FavHouse *favHouse = objects[i];
-                NSLog(@"favHouse: %@", favHouse);
+                // NSLog(@"favHouse: %@", favHouse);
                 [self.houses addObject:favHouse];
             }
             [self.tableView reloadData];
         } else {
-           // self.markFavBtn.selected = false;
+           
         }
         [activityIndicator stopAnimating];
         [activityIndicator removeFromSuperview];
