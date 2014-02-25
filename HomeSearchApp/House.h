@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface House : NSObject
 
 @property (nonatomic, strong) NSString *propName;

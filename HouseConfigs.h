@@ -19,5 +19,4 @@
 
 - (id)initWithDictionary:(NSDictionary *) dictionary;
 
-
 @end

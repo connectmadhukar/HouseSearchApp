@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HomeSearchApp/House.m"
-            timestampString = "414923447.970685"
+            timestampString = "414976210.188543"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
             landmarkName = "-initWithDictionary:"
             landmarkType = "5">
          </BreakpointContent>

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HouseCell : UITableViewCell
+@interface BMHCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *propName;
 @property (weak, nonatomic) IBOutlet UIImageView *houseImageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;

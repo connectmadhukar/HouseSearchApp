@@ -129,7 +129,7 @@
     if (cell == nil) {
         cell = [[HouseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    
+    cell.propName.text = house.propName;
     cell.addressLabel.text = house.address;
     [cell.addressLabel sizeToFit];
     cell.cityLabel.text = house.city;
@@ -178,6 +178,8 @@
         RefineViewController *refineViewController = (RefineViewController *)segue.destinationViewController;
         refineViewController.delegate = self;
         return;
+    } if( segue.identifier != nil && [segue.identifier compare:@"GoToBookmarks"] == 0) {
+        NSLog(@"segue.destinationViewController class:%@",[segue.destinationViewController class]);
     } else {
     UITableViewCell *selectedCell = (UITableViewCell *)sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];

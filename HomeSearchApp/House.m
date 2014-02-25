@@ -9,6 +9,7 @@
 #import "House.h"
 #import "HouseConfigs.h"
 
+
 @implementation House
 
 
@@ -49,5 +50,7 @@
     }
     return self;
 }
+
+
 
 @end
